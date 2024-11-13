@@ -1,0 +1,47 @@
+INFO: Executed command: ADD
+INFO: Executed command: DUMMY 1
+INFO: Executed command: DUMMY
+INFO: Executed command: Print
+INFO: Executed command: format fix 5
+INFO: Executed command: Dummy
+INFO: Executed command: Dummy
+INFO: Executed command: print
+INFO: Executed command: format fix 10
+INFO: Executed command: print
+INFO: Executed command: Format Fix 2
+INFO: Executed command: print
+INFO: Executed command: format raw
+INFO: Executed command: print
+INFO: Executed command: add 
+INFO: Executed command: print
+INFO: Executed command: index
+INFO: Executed command: dummy
+INFO: Executed command: dummy
+INFO: Executed command: dummy
+INFO: Executed command: dummy
+INFO: Executed command: dummy
+INFO: Executed command: dummy
+INFO: Executed command: index
+INFO: Executed command: print
+ERROR: Unbekannter Befehl
+INFO: Executed command: del 3
+INFO: Executed command: print
+INFO: Executed command: index
+INFO: Executed command: replace
+INFO: Executed command: print
+INFO: Executed command: dummy
+INFO: Executed command: dummy
+INFO: Executed command: dummy
+INFO: Executed command: index
+INFO: Executed command: print
+INFO: Executed command: dummy
+ERROR: Unbekannter Befehl
+INFO: Executed command: index
+INFO: Executed command: print
+INFO: Executed command: add
+INFO: Executed command: add
+INFO: Executed command: add
+ERROR: Ungültige Positionsangabe für ADD-Befehl.
+INFO: Executed command: add
+INFO: Executed command: print
+INFO: Executed command: index
