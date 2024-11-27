@@ -1,5 +1,6 @@
 package main;
 
+import java.io.IOException;
 import java.util.logging.*;
 
 /**
@@ -32,10 +33,17 @@ public class LoggingConfig {
         logger.setLevel(Level.ALL);
         logger.setUseParentHandlers(false);
 
-        ConsoleHandler handler = new ConsoleHandler();
-        handler.setLevel(Level.ALL);
-        handler.setFormatter(new SimpleFormatter());
+        try {
+            // Create a FileHandler to write logs to "texteditor.log"
+            FileHandler fileHandler = new FileHandler("texteditor.log", true);
+            fileHandler.setLevel(Level.ALL);
+            fileHandler.setFormatter(new SimpleFormatter());
 
-        logger.addHandler(handler);
+            // Add the FileHandler to the logger
+            logger.addHandler(fileHandler);
+        } catch (IOException e) {
+            System.err.println("Severe: Failed to set up logger handler.");
+            logger.severe("Severe: Failed to set up logger handler.");
+        }
     }
 }
