@@ -1,63 +1,51 @@
 package main.commands;
 
 import main.InputValidator;
-import main.paragraph.Paragraph;
 import main.paragraph.ParagraphManager;
 
 import java.util.Scanner;
 
 /**
- * Adds a paragraph at a specified position.
+ * Handles the ADD command.
  */
-public class AddCommand implements Command {
-    private ParagraphManager paragraphManager;
-    private InputValidator inputValidator;
-    private int position = -1;
+public class AddCommand extends ParagraphCommand {
+    private int position;
     private String text;
+    private InputValidator inputValidator;
 
     /**
-     * Initializes the AddCommand.
+     * Constructs an AddCommand.
      *
-     * @param paragraphManager the ParagraphManager instance
-     * @param inputValidator   the InputValidator instance
-     * @param arguments        the command arguments
-     * @throws Exception if argument parsing fails
+     * @param paragraphManager The ParagraphManager.
+     * @param inputValidator   The InputValidator.
+     * @param position         The position to insert at.
      */
-    public AddCommand(ParagraphManager paragraphManager, InputValidator inputValidator, String arguments) throws Exception {
-        this.paragraphManager = paragraphManager;
+    public AddCommand(ParagraphManager paragraphManager, InputValidator inputValidator, int position) {
+        super(paragraphManager);
         this.inputValidator = inputValidator;
-        parseArguments(arguments);
+        this.position = position;
     }
 
     /**
-     * Parses the command arguments.
-     *
-     * @param arguments the command arguments
-     * @throws Exception if argument parsing fails
+     * Executes the ADD command.
      */
-    private void parseArguments(String arguments) throws Exception {
-        if (!arguments.isEmpty()) {
-            try {
-                position = Integer.parseInt(arguments.trim());
-            } catch (NumberFormatException e) {
-                throw new Exception("Ungültige Positionsangabe für ADD-Befehl.");
-            }
-        }
-        text = readInput("Text eingeben:");
-        text = inputValidator.validate(text);
-    }
-
     @Override
     public void execute() {
-        Paragraph paragraph = new Paragraph(text);
-        paragraphManager.addParagraph(position, paragraph);
+        text = readInput("Text: ");
+        if (inputValidator.validateString(text)) {
+            if (position >= 0) {
+                paragraphManager.addParagraph(position - 1, text);
+            } else {
+                paragraphManager.addParagraph(-1, text);
+            }
+        }
     }
 
     /**
-     * Reads input from the user with a prompt.
+     * Reads input from the user.
      *
-     * @param prompt the input prompt
-     * @return the user input
+     * @param prompt The prompt message.
+     * @return The input string.
      */
     private String readInput(String prompt) {
         System.out.println(prompt);

@@ -1,19 +1,17 @@
 package main.formatter;
 
-import main.paragraph.Paragraph;
-
 import java.util.List;
 
+
 /**
- * Defines the interface for formatting text.
+ * An interface for formatting paragraphs.
  */
 public interface Formatter {
-
     /**
      * Formats a list of paragraphs.
      *
-     * @param paragraphs the list of Paragraph objects
-     * @return the formatted text
+     * @param paragraphs The paragraphs to format.
+     * @return The formatted string.
      */
-    String format(List<Paragraph> paragraphs);
+    String format(List<String> paragraphs);
 }

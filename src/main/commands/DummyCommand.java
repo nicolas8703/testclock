@@ -1,48 +1,34 @@
 package main.commands;
 
-import main.paragraph.Paragraph;
 import main.paragraph.ParagraphManager;
 
 /**
- * Inserts a dummy paragraph at a specified position.
+ * Handles the DUMMY command.
  */
-public class DummyCommand implements Command {
-    private ParagraphManager paragraphManager;
-    private int position = -1;
+public class DummyCommand extends ParagraphCommand {
+    private int position;
+    private String dummyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 
     /**
-     * Initializes the DummyCommand.
+     * Constructs a DummyCommand.
      *
-     * @param paragraphManager the ParagraphManager instance
-     * @param arguments        the command arguments
-     * @throws Exception if argument parsing fails
+     * @param paragraphManager The ParagraphManager.
+     * @param position         The position to insert at.
      */
-    public DummyCommand(ParagraphManager paragraphManager, String arguments) throws Exception {
-        this.paragraphManager = paragraphManager;
-        parseArguments(arguments);
+    public DummyCommand(ParagraphManager paragraphManager, int position) {
+        super(paragraphManager);
+        this.position = position;
     }
 
     /**
-     * Parses the command arguments.
-     *
-     * @param arguments the command arguments
-     * @throws Exception if argument parsing fails
+     * Executes the DUMMY command.
      */
-    private void parseArguments(String arguments) throws Exception {
-        if (!arguments.isEmpty()) {
-            try {
-                position = Integer.parseInt(arguments.trim());
-            } catch (NumberFormatException e) {
-                throw new Exception("Ungültige Positionsangabe für DUMMY-Befehl.");
-            }
-        }
-    }
-
     @Override
     public void execute() {
-        String dummyText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
-        Paragraph paragraph = new Paragraph(dummyText);
-        paragraphManager.addParagraph(position, paragraph);
+        if (position >= 0) {
+            paragraphManager.addParagraph(position - 1, dummyText);
+        } else {
+            paragraphManager.addParagraph(-1, dummyText);
+        }
     }
 }
-

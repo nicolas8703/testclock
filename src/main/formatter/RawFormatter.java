@@ -1,22 +1,25 @@
 package main.formatter;
 
-import main.paragraph.Paragraph;
-
 import java.util.List;
 
 /**
- * Implements raw formatting of paragraphs.
+ * Formats paragraphs in raw format with paragraph numbers.
  */
 public class RawFormatter implements Formatter {
-
+    /**
+     * Formats the paragraphs.
+     *
+     * @param paragraphs The paragraphs to format.
+     * @return The formatted string.
+     */
     @Override
-    public String format(List<Paragraph> paragraphs) {
-        StringBuilder sb = new StringBuilder();
+    public String format(List<String> paragraphs) {
+        StringBuilder output = new StringBuilder();
         int index = 1;
-        for (Paragraph paragraph : paragraphs) {
-            sb.append(index).append(": ").append(paragraph.getText()).append("\n");
+        for (String paragraph : paragraphs) {
+            output.append(index).append(": ").append(paragraph).append("\n");
             index++;
         }
-        return sb.toString();
+        return output.toString();
     }
 }

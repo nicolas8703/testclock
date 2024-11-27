@@ -1,18 +1,44 @@
 package main;
 
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
 /**
- * Validates and filters user input.
+ * Validates input strings and integers.
  */
 public class InputValidator {
+    private Logger logger;
 
     /**
-     * Validates the input string by filtering out unwanted characters.
-     *
-     * @param input the input string
-     * @return the validated and filtered string
+     * Constructs an InputValidator.
      */
-    public String validate(String input) {
-        String allowedChars = "[^a-zA-ZäöüÄÖÜ0-9 .,:;\\-!? '()\"%@+*\\[\\]{}/\\\\&#$]";
-        return input.replaceAll(allowedChars, "");
+    public InputValidator() {
+        this.logger = Logger.getLogger("TextEditorLogger");
+    }
+
+    /**
+     * Validates a string against allowed characters.
+     *
+     * @param input The input string.
+     * @return True if valid, false otherwise.
+     */
+    public boolean validateString(String input) {
+        String pattern = "^[a-zA-Z0-9äöüÄÖÜ.,:;\\-!? '\\(\\)\"%@+*\\[\\]{}/\\\\&#$]*$";
+        boolean isValid = Pattern.matches(pattern, input);
+        if (!isValid) {
+            System.err.println("Severe: Invalid characters in input.");
+            logger.severe("Severe: Invalid characters in input.");
+        }
+        return isValid;
+    }
+
+    /**
+     * Validates an integer input.
+     *
+     * @param input The input integer.
+     * @return True if valid, false otherwise.
+     */
+    public boolean validateInt(int input) {
+        return input >= 0;
     }
 }

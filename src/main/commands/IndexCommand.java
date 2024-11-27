@@ -3,40 +3,28 @@ package main.commands;
 import main.IndexGenerator;
 import main.paragraph.ParagraphManager;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.Collections;
 
 /**
- * Generates and displays the index of terms.
+ * Handles the INDEX command.
  */
 public class IndexCommand implements Command {
     private ParagraphManager paragraphManager;
-    private IndexGenerator indexGenerator;
 
     /**
-     * Initializes the IndexCommand.
+     * Constructs an IndexCommand.
      *
-     * @param paragraphManager the ParagraphManager instance
+     * @param paragraphManager The ParagraphManager.
      */
     public IndexCommand(ParagraphManager paragraphManager) {
         this.paragraphManager = paragraphManager;
-        this.indexGenerator = new IndexGenerator();
     }
 
+    /**
+     * Executes the INDEX command.
+     */
     @Override
     public void execute() {
-        Map<String, List<Integer>> index = indexGenerator.generateIndex(paragraphManager.getAllParagraphs());
-        for (Map.Entry<String, List<Integer>> entry : index.entrySet()) {
-            String term = entry.getKey();
-            List<Integer> paragraphNumbers = entry.getValue();
-            // Sort the paragraph numbers
-            Collections.sort(paragraphNumbers);
-            String positions = paragraphNumbers.stream()
-                    .map(String::valueOf)
-                    .collect(Collectors.joining(","));
-            System.out.println(term + " " + positions);
-        }
+        IndexGenerator indexGenerator = new IndexGenerator();
+        indexGenerator.generateIndex(paragraphManager.getParagraphs());
     }
 }

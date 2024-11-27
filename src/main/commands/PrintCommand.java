@@ -1,33 +1,32 @@
 package main.commands;
 
 import main.formatter.Formatter;
-import main.paragraph.Paragraph;
 import main.paragraph.ParagraphManager;
 
-import java.util.List;
-
 /**
- * Prints the paragraphs using the current formatter.
+ * Handles the PRINT command.
  */
 public class PrintCommand implements Command {
     private ParagraphManager paragraphManager;
     private Formatter formatter;
 
     /**
-     * Initializes the PrintCommand.
+     * Constructs a PrintCommand.
      *
-     * @param paragraphManager the ParagraphManager instance
-     * @param formatter        the Formatter instance
+     * @param paragraphManager The ParagraphManager.
+     * @param formatter        The Formatter.
      */
     public PrintCommand(ParagraphManager paragraphManager, Formatter formatter) {
         this.paragraphManager = paragraphManager;
         this.formatter = formatter;
     }
 
+    /**
+     * Executes the PRINT command.
+     */
     @Override
     public void execute() {
-        List<Paragraph> paragraphs = paragraphManager.getAllParagraphs();
-        String output = formatter.format(paragraphs);
+        String output = formatter.format(paragraphManager.getParagraphs());
         System.out.println(output);
     }
 }

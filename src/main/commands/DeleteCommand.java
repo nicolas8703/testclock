@@ -1,43 +1,34 @@
 package main.commands;
 
+
 import main.paragraph.ParagraphManager;
+
 /**
- * Deletes a paragraph at a specified position.
+ * Handles the DELETE command.
  */
-public class DeleteCommand implements Command {
-    private ParagraphManager paragraphManager;
-    private int position = -1;
+public class DeleteCommand extends ParagraphCommand {
+    private int position;
 
     /**
-     * Initializes the DeleteCommand.
+     * Constructs a DeleteCommand.
      *
-     * @param paragraphManager the ParagraphManager instance
-     * @param arguments        the command arguments
-     * @throws Exception if argument parsing fails
+     * @param paragraphManager The ParagraphManager.
+     * @param position         The position to delete.
      */
-    public DeleteCommand(ParagraphManager paragraphManager, String arguments) throws Exception {
-        this.paragraphManager = paragraphManager;
-        parseArguments(arguments);
+    public DeleteCommand(ParagraphManager paragraphManager, int position) {
+        super(paragraphManager);
+        this.position = position;
     }
 
     /**
-     * Parses the command arguments.
-     *
-     * @param arguments the command arguments
-     * @throws Exception if argument parsing fails
+     * Executes the DELETE command.
      */
-    private void parseArguments(String arguments) throws Exception {
-        if (!arguments.isEmpty()) {
-            try {
-                position = Integer.parseInt(arguments.trim());
-            } catch (NumberFormatException e) {
-                throw new Exception("Ungültige Positionsangabe für DEL-Befehl.");
-            }
-        }
-    }
-
     @Override
-    public void execute() throws Exception {
-        paragraphManager.deleteParagraph(position);
+    public void execute() {
+        if (position >= 0) {
+            paragraphManager.deleteParagraph(position - 1);
+        } else {
+            paragraphManager.deleteParagraph(paragraphManager.getParagraphs().size() - 1);
+        }
     }
 }

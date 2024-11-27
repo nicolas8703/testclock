@@ -2,95 +2,88 @@ package main;
 
 import main.commands.*;
 import main.formatter.Formatter;
+import main.formatter.RawFormatter;
 import main.paragraph.ParagraphManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
- * Parses user input and creates corresponding Command objects for execution.
+ * Processes commands and dispatches them to appropriate handlers.
  */
 public class CommandProcessor {
-    private Map<String, CommandFactory> commandFactoryMap;
     private ParagraphManager paragraphManager;
     private Formatter formatter;
+    private Map<CommandWord, Command> commands;
     private Logger logger;
-    private InputValidator inputValidator;
 
     /**
-     * Initializes the CommandProcessor with required dependencies.
+     * Constructs a CommandProcessor.
      *
-     * @param paragraphManager the ParagraphManager instance
-     * @param formatter        the current Formatter instance
-     * @param logger           the Logger instance
+     * @param paragraphManager The ParagraphManager.
+     * @param formatter        The Formatter.
      */
-    public CommandProcessor(ParagraphManager paragraphManager, Formatter formatter, Logger logger) {
+    public CommandProcessor(ParagraphManager paragraphManager, Formatter formatter) {
         this.paragraphManager = paragraphManager;
         this.formatter = formatter;
-        this.logger = logger;
-        this.inputValidator = new InputValidator();
-        this.commandFactoryMap = new HashMap<>();
-
-        registerCommandFactories();
+        this.commands = new HashMap<>();
+        this.logger = Logger.getLogger("TextEditorLogger");
     }
 
     /**
-     * Registers available command factories.
-     */
-    private void registerCommandFactories() {
-        commandFactoryMap.put("ADD", args -> new AddCommand(paragraphManager, inputValidator, args));
-        commandFactoryMap.put("DEL", args -> new DeleteCommand(paragraphManager, args));
-        commandFactoryMap.put("DUMMY", args -> new DummyCommand(paragraphManager, args));
-        commandFactoryMap.put("EXIT", args -> new ExitCommand());
-        commandFactoryMap.put("FORMAT", args -> new FormatCommand(this, args));
-        commandFactoryMap.put("INDEX", args -> new IndexCommand(paragraphManager));
-        commandFactoryMap.put("PRINT", args -> new PrintCommand(paragraphManager, formatter));
-        commandFactoryMap.put("REPLACE", args -> new ReplaceCommand(paragraphManager, inputValidator, args));
-    }
-
-    /**
-     * Processes the input line and returns the corresponding Command object.
+     * Dispatches the command to the appropriate handler.
      *
-     * @param inputLine the user input line
-     * @return the Command object to execute
-     * @throws Exception if the command is invalid
+     * @param commandDescription The command description.
      */
-    public Command processCommand(String inputLine) throws Exception {
-        String[] tokens = inputLine.trim().split("\\s+", 2);
-        String commandName = tokens[0].toUpperCase();
-        String arguments = tokens.length > 1 ? tokens[1] : "";
-
-        CommandFactory factory = commandFactoryMap.get(commandName);
-        if (factory != null) {
-            return factory.createCommand(arguments);
-        } else {
-            throw new Exception("Unbekannter Befehl");
+    public void dispatchCommand(CommandDescription commandDescription) {
+        CommandWord commandWord = commandDescription.getCommandWord();
+        int position = commandDescription.getOptionalPosition();
+        Command command = null;
+        InputValidator inputValidator = new InputValidator();
+        switch (commandWord) {
+            case ADD:
+                command = new AddCommand(paragraphManager, inputValidator, position);
+                break;
+            case DEL:
+                command = new DeleteCommand(paragraphManager, position);
+                break;
+            case DUMMY:
+                command = new DummyCommand(paragraphManager, position);
+                break;
+            case PRINT:
+                command = new PrintCommand(paragraphManager, formatter);
+                break;
+            case FORMAT_RAW:
+                formatter = new RawFormatter();
+                break;
+            case FORMAT_FIX:
+                command = new FormatCommand(this, position);
+                break;
+            case REPLACE:
+                command = new ReplaceCommand(paragraphManager, inputValidator, position);
+                break;
+            case INDEX:
+                command = new IndexCommand(paragraphManager);
+                break;
+            case EXIT:
+                command = new ExitCommand();
+                break;
+            default:
+                // Unknown command is already handled in InputHandler
+                break;
+        }
+        if (command != null) {
+            command.execute();
         }
     }
 
     /**
-     * Gets the current Formatter.
+     * Sets the formatter.
      *
-     * @return the Formatter instance
-     */
-    public Formatter getFormatter() {
-        return formatter;
-    }
-
-    /**
-     * Sets the current Formatter.
-     *
-     * @param formatter the Formatter instance to set
+     * @param formatter The Formatter to set.
      */
     public void setFormatter(Formatter formatter) {
         this.formatter = formatter;
-    }
-
-    /**
-     * Functional interface for creating Command instances.
-     */
-    @FunctionalInterface
-    private interface CommandFactory {
-        Command createCommand(String arguments) throws Exception;
     }
 }

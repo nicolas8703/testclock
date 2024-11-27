@@ -4,29 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Manages the list of paragraphs.
+ * Manages the paragraphs in the text editor.
  */
 public class ParagraphManager {
-    private List<Paragraph> paragraphs;
+    private List<String> paragraphs;
 
     /**
-     * Initializes the ParagraphManager.
+     * Constructs a ParagraphManager.
      */
     public ParagraphManager() {
-        paragraphs = new ArrayList<>();
+        this.paragraphs = new ArrayList<>();
     }
 
     /**
      * Adds a paragraph at the specified position.
      *
-     * @param position  the position to insert at (1-based, -1 for end)
-     * @param paragraph the Paragraph object to add
+     * @param position  The position to insert at.
+     * @param paragraph The paragraph text.
      */
-    public void addParagraph(int position, Paragraph paragraph) {
-        if (position == -1 || position > paragraphs.size()) {
-            paragraphs.add(paragraph);
-        } else if (position >= 1 && position <= paragraphs.size()) {
-            paragraphs.add(position - 1, paragraph);
+    public void addParagraph(int position, String paragraph) {
+        if (position >= 0 && position <= paragraphs.size()) {
+            paragraphs.add(position, paragraph);
         } else {
             paragraphs.add(paragraph);
         }
@@ -35,56 +33,45 @@ public class ParagraphManager {
     /**
      * Deletes the paragraph at the specified position.
      *
-     * @param position the position to delete (1-based, -1 for last)
-     * @throws Exception if the position is invalid
+     * @param position The position of the paragraph to delete.
      */
-    public void deleteParagraph(int position) throws Exception {
-        if (paragraphs.isEmpty()) {
-            throw new Exception("No paragraphs to delete.");
-        }
-        if (position == -1) {
-            paragraphs.remove(paragraphs.size() - 1);
-        } else if (position >= 1 && position <= paragraphs.size()) {
-            paragraphs.remove(position - 1);
-        } else {
-            throw new Exception("Invalid paragraph number.");
+    public void deleteParagraph(int position) {
+        if (position >= 0 && position < paragraphs.size()) {
+            paragraphs.remove(position);
         }
     }
 
     /**
-     * Retrieves the paragraph at the specified position.
+     * Gets the paragraph at the specified position.
      *
-     * @param position the position to retrieve (1-based)
-     * @return the Paragraph object
-     * @throws Exception if the position is invalid
+     * @param position The position of the paragraph.
+     * @return The paragraph text.
      */
-    public Paragraph getParagraph(int position) throws Exception {
-        if (position >= 1 && position <= paragraphs.size()) {
-            return paragraphs.get(position - 1);
-        } else {
-            throw new Exception("Invalid paragraph number.");
+    public String getParagraph(int position) {
+        if (position >= 0 && position < paragraphs.size()) {
+            return paragraphs.get(position);
         }
+        return null;
     }
 
     /**
-     * Retrieves the last paragraph.
+     * Gets the last paragraph.
      *
-     * @return the last Paragraph object
-     * @throws Exception if there are no paragraphs
+     * @return The last paragraph text.
      */
-    public Paragraph getLastParagraph() throws Exception {
-        if (paragraphs.isEmpty()) {
-            throw new Exception("No paragraphs available.");
+    public String getLastParagraph() {
+        if (!paragraphs.isEmpty()) {
+            return paragraphs.get(paragraphs.size() - 1);
         }
-        return paragraphs.get(paragraphs.size() - 1);
+        return null;
     }
 
     /**
-     * Retrieves all paragraphs.
+     * Gets all paragraphs.
      *
-     * @return a list of Paragraph objects
+     * @return A list of paragraphs.
      */
-    public List<Paragraph> getAllParagraphs() {
+    public List<String> getParagraphs() {
         return paragraphs;
     }
 }
